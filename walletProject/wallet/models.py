@@ -6,7 +6,7 @@ from django.db import models
 # Create your models here.
 
 
-class ConiType(models.Model):
+class CoinType(models.Model):
     name = models.CharField(max_length=255, verbose_name='Nombre')
 
     def __str__(self):
@@ -14,7 +14,7 @@ class ConiType(models.Model):
 
 
 class Coin(models.Model):
-    type = models.OneToOneField(ConiType, on_delete=models.CASCADE, verbose_name='Tipo')
+    type = models.OneToOneField(CoinType, on_delete=models.CASCADE, verbose_name='Tipo', unique=False)
     cant = models.FloatField(verbose_name='Cantidad')
 
     def __str__(self):
@@ -23,6 +23,7 @@ class Coin(models.Model):
 
 class Operation(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='Creada')
+    action = models.CharField(max_length=255, verbose_name='Acción')
 
     def __str__(self):
         return str(self.created)

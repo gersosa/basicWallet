@@ -11,7 +11,7 @@ class CoinAdmin(admin.ModelAdmin):
     list_display = ('id', 'type', 'cant')
 
 
-class ConiTypeAdmin(admin.ModelAdmin):
+class CoinTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
 
@@ -30,7 +30,7 @@ class UserRipioAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Coin, CoinAdmin)
-admin.site.register(ConiType, ConiTypeAdmin)
+admin.site.register(CoinType, CoinTypeAdmin)
 admin.site.register(Operation, OperationAdmin)
 admin.site.register(Wallet, WalletAdmin)
 admin.site.register(UserRipio, UserRipioAdmin)
