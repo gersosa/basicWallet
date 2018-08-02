@@ -1,44 +1,69 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 from django.db import models
+from django.conf import settings
+
 
 # Create your models here.
 
 
-class CoinType(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Nombre')
+class Coin(models.Model):
+    name = models.CharField(_('Nombre'), max_length=255)
 
     def __str__(self):
         return self.name
 
 
-class Coin(models.Model):
-    type = models.OneToOneField(CoinType, on_delete=models.CASCADE, verbose_name='Tipo', unique=False)
-    cant = models.FloatField(verbose_name='Cantidad')
+class Wallet(models.Model):
+    coin = models.ForeignKey(Coin, verbose_name=_('Moneda'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Propietario'))
+    cant = models.FloatField(_('Cantidad actual'), default=0)
+
 
     def __str__(self):
-        return u'%s%s%s' % (self.type, '->', self.cant)
+        return str(self.cant) + ' -> ' + self.user.username
+
+    def same_coin(self, wallet):
+        return wallet.coin == self.coin
+
+    def can_send(self, amount):
+        return (self.cant - amount) >= 0
+
+    def add(self, amount):
+        self.cant += amount
+        return self.save()
+
+    def remove(self, amount):
+        self.cant -= amount
+        return self.save()
 
 
 class Operation(models.Model):
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Creada')
-    action = models.CharField(max_length=255, verbose_name='Acción')
+    mount = models.FloatField(_('Monto de la operación'))
+    created = models.DateTimeField(_('Creada'), auto_now_add=True)
+    from_wallet = models.ForeignKey(Wallet, verbose_name=_('Billetera origen'), related_name='operation_origin')
+    to_wallet = models.ForeignKey(Wallet, verbose_name=_('Billetera destino'))
 
     def __str__(self):
-        return str(self.created)
+        return self.from_wallet + ' -> ' + self.to_wallet
 
+    def save(self, *args, **kwargs):
+        same_coin = self.from_wallet.same_coin(self.to_wallet)
+        has_money = self.from_wallet.can_send(self.mount)
 
-class Wallet(models.Model):
-    coins = models.ManyToManyField(Coin, verbose_name='Monedas', null=True)
-    operations = models.ManyToManyField(Operation, verbose_name='Transacciones', null=True)
+        if not same_coin:
+            return {'error': 'Wallets must have the same coin'}
+        elif not has_money:
+            return {
+                'error': 'Owner wallet must have enought money'
+            }
+        elif self.mount <= 0:
+            return {
+                'error': 'Amount must be positive',
+            }
+        else:
+            self.from_wallet.remove(self.mount)
+            self.to_wallet.sum(self.mount)
 
-    def get_coins(self):
-        return "\n".join([c.__str__() for c in self.coins.all()])
-
-    def get_operations(self):
-        return "\n".join([c.__str__() for c in self.operations.all()])
-
-
-class UserRipio(User):
-    wallet = models.OneToOneField(Wallet, verbose_name='Billetera')
+            return super(Operation, self).save(*args, **kwargs)

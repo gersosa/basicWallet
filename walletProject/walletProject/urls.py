@@ -15,8 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from rest_framework.routers import DefaultRouter
+from rest_framework_jwt.views import obtain_jwt_token
+from wallet import views
+
+
+router = DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'wallets', views.WalletViewSet)
+router.register(r'operations', views.OperationViewSet)
+router.register(r'coins', views.CoinViewSet)
+
 
 urlpatterns = [
+    url(r'^api/', include(router.urls)),
+    url(r'^api/api-token-auth/', obtain_jwt_token),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('wallet.urls')),
 ]

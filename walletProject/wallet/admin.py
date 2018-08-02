@@ -8,29 +8,18 @@ from models import *
 
 
 class CoinAdmin(admin.ModelAdmin):
-    list_display = ('id', 'type', 'cant')
-
-
-class CoinTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
 
 class OperationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'created')
+    list_display = ('id', 'mount', 'created', 'from_wallet', 'to_wallet')
 
 
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_coins', 'get_operations')
+    list_display = ('id', 'coin', 'cant')
 
-
-
-
-class UserRipioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'wallet')
 
 
 admin.site.register(Coin, CoinAdmin)
-admin.site.register(CoinType, CoinTypeAdmin)
 admin.site.register(Operation, OperationAdmin)
 admin.site.register(Wallet, WalletAdmin)
-admin.site.register(UserRipio, UserRipioAdmin)
