@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from django_filters import rest_framework
+from django.views import generic
+from django.shortcuts import render
 from rest_framework.decorators import detail_route, list_route
 from serializers import *
 from models import *
@@ -67,3 +69,11 @@ class WalletViewSet(viewsets.ModelViewSet):
         return Response(
             {'detail': 'The user has not wallet a of this currency'},
             status=400)
+
+
+class ClientView(generic.View):
+    template_name = "wallet/index.html"
+
+    def get(self, request, *args, **kwargs):
+        ctx = {}
+        return render(request, self.template_name, ctx)
