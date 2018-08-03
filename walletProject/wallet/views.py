@@ -16,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 class CoinViewSet(viewsets.ModelViewSet):
@@ -60,14 +60,14 @@ class WalletViewSet(viewsets.ModelViewSet):
     def get_wallet_of_user(self, request, pk=None):
         user = User.objects.get(pk=pk)
         wallets_of = Wallet.objects.filter(
-            user=user).filter(currency=request.data['id'])
+            user=user).filter(coin=request.data['id'])
 
         if wallets_of:
             serializer = self.get_serializer(wallets_of, many=True)
             return Response(serializer.data)
 
         return Response(
-            {'detail': 'The user has not wallet a of this currency'},
+            {'detail': 'The user has not wallet a of this coin'},
             status=400)
 
 

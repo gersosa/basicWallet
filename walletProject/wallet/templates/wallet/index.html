@@ -16,48 +16,38 @@
     <script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'js/walletclient.js'%}"></script>
 	<div class="container">
-		<div class="col-12" style="width:500px">
-		<h1>Bienvenido a Wallet Ripio</h1>
-	    	<form class="form-signin" id="login">
+		<div class="col-12" style="width:500px" id="login">
+<!-- 		<h1>Bienvenido a Wallet Ripio</h1> -->
+	    	<div class="form-signin">
     		<h2>Acceda a su billetera: </h2>
 		      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 		      <label for="inputUsername" class="sr-only">User Name</label>
 		      <input type="text" id="inputUsername" class="form-control" placeholder="User Name" required autofocus>
 		      <label for="inputPassword" class="sr-only">Password</label>
 		      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-		      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		    </form>
+		      <button class="btn btn-lg btn-primary btn-block login-button" type="submit">Sign in</button>
+		    </div>
 	    </div>
+	    <br>
+	    <div class="card" style="display: none;" id="wallet">
+		  <div class="card-header" id="name"></div>
+		  <div class="card-body" id="info"></div> 
+		  <div class="card-footer" id="actions">
+		  	<button type="button" class="btn btn-info send" id="send">Enviar dinero</button>
+		  </div>
+		</div>
+		<br>
+		<div class="card" style="display: none;" id="form_send">
+		<label>Usuarios: </label>
+			<select id="users_select" class="form-control">
+				<option>--Seleccione un usuario--</option>
+			</select>
+			<input type="integer" class="form-control" name="" placeholder="Ingrese un monto">
+		<div class="card-footer">
+			<button type="button" class="btn btn-success" onclick="send()">Enviar</button>
+		</div>
+		</div>
 	</div>
-<script type="text/javascript">
-	
-	var localhost = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
 
-  console.log(localhost)
-
-$( "#login" ).submit(function() {
-  console.log('entraaaa')
-  $.ajax({
-       url: localhost+'api/api-token-auth',
-       type: 'POST',
-       data: {
-        username:$('#inputUsername').val(),
-        password:$('#inputPassword').val()
-       },
-       dataType: 'json',
-       success: function(res){
-               console.log(res)
-               $.ajaxSetup({
-                  headers: {
-                    "token": res.token
-                  }
-               });
-       },
-       error: function(error) {
-           callbackErr(error,self)
-       }
-   })
-});
-</script>
   </body>
 </html>

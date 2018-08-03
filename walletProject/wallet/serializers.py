@@ -6,7 +6,7 @@ from models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email')
+        fields = ('id', 'url', 'username', 'email')
 
 
 class CoinSerializer(serializers.HyperlinkedModelSerializer):
