@@ -34,7 +34,6 @@ function get_wallet(id) {
       id:id
     },
     success: function(data, status) {
-      console.log(data)
       $('#card_name').show()
       $('#name').append(data[0]['user']['username'])
       data.forEach(function(e) {
@@ -77,26 +76,33 @@ function get_data(user) {
 $(document).on("click",".login-button", function(){
   var user = $('#inputUsername').val()
   var pass = $('#inputPassword').val()
-    $.ajax({
-      url: authorization,
-      type: 'POST',
-      data: {
-        username: user,
-        password: pass
-       },
-      dataType: 'json', 
-        success: function(result){
-          token = result['token']
-          $('#login').hide()
-          get_data(user)
-          $('#wallet').show()
-      },
-      error: function(error) {
-           console.log('error')
-           //callbackErr(error,self)
-       }
-
-    });
+  if (user) {
+    if (pass) {
+      $.ajax({
+        url: authorization,
+        type: 'POST',
+        data: {
+          username: user,
+          password: pass
+         },
+        dataType: 'json', 
+          success: function(result){
+            token = result['token']
+            $('#login').hide()
+            get_data(user)
+            $('#wallet').show()
+        },
+        error: function(error) {
+              alertify.error('Los datos son incorrectos!')
+             //callbackErr(error,self)
+         }
+      });
+    }else{
+      alertify.error('Debe ingresar su password')
+    }
+  }else{
+    alertify.error('Debe ingresar su usuario')
+  }
 });
 
 $(document).on("click","#send",function(){
@@ -117,6 +123,7 @@ $(document).on("click","#balance",function(){
 function create() {
   var user = $('#name').text()
   var coin_name = $( "#coins_select option:selected" ).text()
+  var coin_id = $("#coins_select option:selected").val()
   var amount = $('#new_coin').val()
   console.log(user, coin_name, amount)
   $.ajax({
@@ -124,7 +131,9 @@ function create() {
     type: 'POST',
     dataType: 'json',
     data: {
-      id:id
+      user:user,
+      cant: amount,
+      coin: coin_id
     },
     success: function(data, status) {
       console.log(data)
