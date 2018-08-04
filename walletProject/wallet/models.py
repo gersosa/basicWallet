@@ -16,7 +16,7 @@ class Coin(models.Model):
 
 
 class Wallet(models.Model):
-    coin = models.ForeignKey(Coin, verbose_name=_('Moneda'), unique=True)
+    coin = models.ForeignKey(Coin, verbose_name=_('Moneda'))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Propietario'))
     cant = models.FloatField(_('Cantidad actual'), default=0)
 

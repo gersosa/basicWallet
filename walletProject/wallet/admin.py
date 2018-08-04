@@ -15,7 +15,7 @@ class OperationAdmin(admin.ModelAdmin):
 
 
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ('id', 'coin', 'cant')
+    list_display = ('id', 'coin', 'cant', 'user')
 
 
 admin.site.register(Coin, CoinAdmin)

@@ -33,28 +33,61 @@
 		<div class="col-4"></div>
 	</div>
 	<br>
-	<h3 id="name"></h3>
-	<div class="card-columns" id="wallets">
-		
+	<div class="card bg-primary text-white" id="card_name" style="display: none;">
+		<h3 id="name"></h3>
 	</div>
-	    <div class="card" style="display: none;" id="wallet">
-		  
-		  <div class="card-body" id="info"></div> 
-		  <div class="card-footer" id="actions">
-		  	<button type="button" class="btn btn-info send" id="send">Enviar dinero</button>
-		  </div>
+	<br>
+	<div class="card-columns" id="wallets"></div>
+	    
+	<div class="card" style="display: none;" id="wallet">
+	  <div class="card-body" id="info">Operaciones:</div> 
+	  <div class="card-footer" id="actions">
+	  	<button type="button" class="btn btn-success" id="create">Crear Moneda</button>
+	  	<button type="button" class="btn btn-info send" id="send">Enviar Dinero</button>
+	  	<button type="button" class="btn btn-danger" id="balance">Balance</button>
+	  </div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-4">
+			<div class="card" style="display: none;" id="coin_create">
+				<label>Monedas: </label>
+					<select id="coins_select" class="form-control">
+						<option>--Seleccione una moneda--</option>
+					</select>
+					<input type="integer" class="form-control" id="new_coin" placeholder="Ingrese un monto">
+				<div class="card-footer">
+					<button type="button" class="btn btn-warning" onclick="create()">Crear</button>
+				</div>
+			</div>
 		</div>
+		<div class="col-4">
+			<div class="card" style="display: none;" id="form_send">
+				<label>Usuarios: </label>
+					<select id="users_select" class="form-control">
+						<option>--Seleccione un usuario--</option>
+					</select>
+					<input type="integer" class="form-control" name="" placeholder="Ingrese un monto">
+				<div class="card-footer">
+					<button type="button" class="btn btn-warning" onclick="send()">Enviar</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="card" style="display: none;" id="card_balance">
+				<label>Usuarios: </label>
+					<select id="balance_select" class="form-control">
+						<option>--Seleccione un moneda--</option>
+					</select>
+					<h2></h2>
+				<div class="card-footer">
+					<button type="button" class="btn btn-warning" onclick="">Calcular</button>
+				</div>
+			</div>
+		</div>
+	</div>
 		<br>
-		<div class="card" style="display: none;" id="form_send">
-		<label>Usuarios: </label>
-			<select id="users_select" class="form-control">
-				<option>--Seleccione un usuario--</option>
-			</select>
-			<input type="integer" class="form-control" name="" placeholder="Ingrese un monto">
-		<div class="card-footer">
-			<button type="button" class="btn btn-success" onclick="send()">Enviar</button>
-		</div>
-		</div>
+
 	</div>
 
   </body>

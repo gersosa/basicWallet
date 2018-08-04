@@ -2,30 +2,26 @@ var localhost = location.protocol+'//'+location.hostname+(location.port ? ':'+lo
 var authorization = localhost+'/api/api-token-auth/'
 var users = localhost+'/api/users/'
 var wallets = localhost+'/api/wallets/'
+var coins = localhost+'/api/coins/'
 var operations = localhost+'/api/operations/'
 var token = ''
 var userid = ''
 
-function send() {
+function get_coins_selects() {
   $.ajax({
-    url: authorization,
-    type: 'POST',
-    data: {
-      username: user,
-      password: pass
-     },
-    dataType: 'json', 
-      success: function(result){
-        token = result['token']
-        $('#login').hide()
-        get_data(user)
-        $('#wallet').show()
+    url: coins,
+    type: 'GET',
+    dataType: 'json',
+    data: {},
+    success: function(data, status) {
+      data.forEach(function(element) {
+          $('#coins_select').append($('<option>', {
+            value: element['id'],
+            text: element['name']
+          }));
+      });
     },
-    error: function(error) {
-         console.log('error')
-         //callbackErr(error,self)
-     }
-
+    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });
 }
 
@@ -39,14 +35,20 @@ function get_wallet(id) {
     },
     success: function(data, status) {
       console.log(data)
+      $('#card_name').show()
       $('#name').append(data[0]['user']['username'])
       data.forEach(function(e) {
         $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
+        $('#balance_select').append($('<option>', {
+            value: e['id'],
+            text: e['coin']['name']
+          }));
       });
 
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });
+  get_coins_selects()
 }
 
 function get_data(user) {
@@ -100,3 +102,43 @@ $(document).on("click",".login-button", function(){
 $(document).on("click","#send",function(){
     $("#form_send").toggle();
 });
+
+$(document).on("click","#create",function(){
+    $("#coin_create").toggle();
+});
+
+$(document).on("click","#balance",function(){
+    $("#card_balance").toggle();
+});
+
+
+//operation functions
+
+function create() {
+  var user = $('#name').text()
+  var coin_name = $( "#coins_select option:selected" ).text()
+  var amount = $('#new_coin').val()
+  console.log(user, coin_name, amount)
+  $.ajax({
+    url: wallets,
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      id:id
+    },
+    success: function(data, status) {
+      console.log(data)
+      $('#card_name').show()
+      $('#name').append(data[0]['user']['username'])
+      data.forEach(function(e) {
+        $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
+        $('#balance_select').append($('<option>', {
+            value: e['id'],
+            text: e['coin']['name']
+          }));
+      });
+
+    },
+    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+  });
+}
