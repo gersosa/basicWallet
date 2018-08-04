@@ -35,13 +35,14 @@ function get_wallet(id) {
     type: 'POST',
     dataType: 'json',
     data: {
-      id:userid
+      id:id
     },
     success: function(data, status) {
-      data = data[0]
-      $('#name').append(data['user']['username'])
-      $('#info').append(data['coin']['name']+': ')
-      $('#info').append(data['cant'])
+      console.log(data)
+      $('#name').append(data[0]['user']['username'])
+      data.forEach(function(e) {
+        $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
+      });
 
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 

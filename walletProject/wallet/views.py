@@ -58,9 +58,8 @@ class WalletViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['post'])
     def get_wallet_of_user(self, request, pk=None):
-        user = User.objects.get(pk=pk)
-        wallets_of = Wallet.objects.filter(
-            user=user).filter(coin=request.data['id'])
+        user = User.objects.get(pk=request.data['id'])
+        wallets_of = Wallet.objects.filter(user=user)
 
         if wallets_of:
             serializer = self.get_serializer(wallets_of, many=True)

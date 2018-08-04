@@ -16,21 +16,29 @@
     <script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
     <script src="{% static 'js/walletclient.js'%}"></script>
 	<div class="container">
-		<div class="col-12" style="width:500px" id="login">
-<!-- 		<h1>Bienvenido a Wallet Ripio</h1> -->
-	    	<div class="form-signin">
+	<h1>Bienvenido a Wallet Ripio</h1>
+	<div class="row" id="login">
+		<div class="col-4"></div>
+		<div class="col-5">
+			<div class="form-signin">
     		<h2>Acceda a su billetera: </h2>
-		      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 		      <label for="inputUsername" class="sr-only">User Name</label>
 		      <input type="text" id="inputUsername" class="form-control" placeholder="User Name" required autofocus>
+		      <br>
 		      <label for="inputPassword" class="sr-only">Password</label>
 		      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
 		      <button class="btn btn-lg btn-primary btn-block login-button" type="submit">Sign in</button>
 		    </div>
-	    </div>
-	    <br>
+		</div>
+		<div class="col-4"></div>
+	</div>
+	<br>
+	<h3 id="name"></h3>
+	<div class="card-columns" id="wallets">
+		
+	</div>
 	    <div class="card" style="display: none;" id="wallet">
-		  <div class="card-header" id="name"></div>
+		  
 		  <div class="card-body" id="info"></div> 
 		  <div class="card-footer" id="actions">
 		  	<button type="button" class="btn btn-info send" id="send">Enviar dinero</button>
