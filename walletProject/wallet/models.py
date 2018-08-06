@@ -51,6 +51,7 @@ class Operation(models.Model):
     def save(self, *args, **kwargs):
         same_coin = self.from_wallet.same_coin(self.to_wallet)
         has_money = self.from_wallet.can_send(self.mount)
+        print 'llegaaaaaaaaaaaa 1'
 
         if not same_coin:
             return {'error': 'Wallets must have the same coin'}
@@ -65,5 +66,5 @@ class Operation(models.Model):
         else:
             self.from_wallet.remove(self.mount)
             self.to_wallet.add(self.mount)
-
+            print 'llegaaaaaaaaaaaa 5'
             return super(Operation, self).save(*args, **kwargs)

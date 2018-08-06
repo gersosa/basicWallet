@@ -11,7 +11,7 @@ alertify.set('notifier','position', 'top-right');
 
 
 function get_other_users() {
-  var coin = $( "#wallet_origin option:selected" ).val()
+  var coin = $( "#wallet_origin option:selected" ).text().split('->')[0]
   $.ajax({
     url: wallets+'havent_user/',
     type: 'GET',
@@ -48,7 +48,7 @@ function get_coins_selects() {
     success: function(data, status) {
       data.forEach(function(element) {
           $('#coins_select').append($('<option>', {
-            value: element['name'],
+            value: element['id'],
             text: element['name']
           }));
       });
@@ -72,7 +72,7 @@ function get_wallet(id) {
       data.forEach(function(e) {
         $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
         $('#wallet_origin').append($('<option>', {
-            value: e['coin']['name'],
+            value: e['id'],
             text: e['coin']['name']+'->'+e['cant']
           }));
         $('#balance_select').append($('<option>', {
@@ -202,8 +202,7 @@ function send() {
       amount:amount
     },
     success: function(data, status) {
-
-
+      alertify.success('El envió se realizo correctamente')
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });
@@ -220,8 +219,9 @@ function balance(){
       coin: coin
     },
     success: function(data, status) {
-      console.log(data)
       alertify.alert('Usted cuenta con:', data['balance']+' '+coin);
+      $('#wallets').empty()
+      get_wallet(userid)
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });  
