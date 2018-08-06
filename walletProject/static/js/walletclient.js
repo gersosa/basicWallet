@@ -76,7 +76,7 @@ function get_wallet(id) {
             text: e['coin']['name']+'->'+e['cant']
           }));
         $('#balance_select').append($('<option>', {
-            value: e['id'],
+            value: e['coin']['id'],
             text: e['coin']['name']
           }));
       });
@@ -207,4 +207,22 @@ function send() {
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });
+}
+
+function balance(){
+  var coin = $("#balance_select option:selected").text()
+  $.ajax({
+    url: wallets+'calculator/',
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      user: name,
+      coin: coin
+    },
+    success: function(data, status) {
+      console.log(data)
+      alertify.alert('Usted cuenta con:', data['balance']+' '+coin);
+    },
+    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+  });  
 }

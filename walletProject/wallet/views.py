@@ -69,6 +69,17 @@ class WalletViewSet(viewsets.ModelViewSet):
 
         return Response([])
 
+    @list_route()
+    def calculator(self, request):
+        coin = Coin.objects.get(name=request.GET['coin'])
+        user = User.objects.get(username=request.GET['user'])
+        wallet_coins = Wallet.objects.filter(user=user, coin=coin)
+        ctx = {}
+        ctx['balance'] = 0
+        for w in wallet_coins:
+            ctx['balance'] = ctx['balance'] + w.cant
+        return Response(ctx)
+
 
 class ClientView(generic.View):
     template_name = "wallet/index.html"
