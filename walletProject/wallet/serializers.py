@@ -21,11 +21,15 @@ class WalletSerializer(serializers.HyperlinkedModelSerializer):
     coin = CoinSerializer(required=False)
 
     def create(self, validated_data):
-        print validated_data, 'acaaaa'
-        print validated_data['cant'], validated_data['user']['username'], validated_dat.user, 'estoooooooooooooooooooooooooooooooooo'
-        user = User.objects.get(username=validated_data['user']['username'])
-        amount = validated_data['cant']
-        coin = Coin.objects.get(name=validated_data['coin']['name'])
+        data = self.context['request'].POST
+        try:
+            user = User.objects.get(username=data['user'])
+            amount = data['cant']
+            coin = Coin.objects.get(name=data['coin'])
+        except:
+            user = User.objects.get(username=validated_data['user']['username'])
+            amount = validated_data['cant']
+            coin = Coin.objects.get(name=validated_data['coin']['name'])
 
         return Wallet.objects.create(coin=coin, user=user, cant=amount)
 

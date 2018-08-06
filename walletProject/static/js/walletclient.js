@@ -168,21 +168,15 @@ function create() {
     type: 'POST',
     dataType: 'json',
     data: {
-      'user': {"username":user},
+      user: user,
       cant: amount,
-      coin:  { coin:{ "id": coin_id, "name": coin_name}}
+      coin: coin_name
     },
     success: function(data, status) {
       console.log(data)
-      // $('#card_name').show()
-      // $('#name').append(data[0]['user']['username'])
-      // data.forEach(function(e) {
-      //   $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
-      //   $('#balance_select').append($('<option>', {
-      //       value: e['id'],
-      //       text: e['coin']['name']
-      //     }));
-      // });
+      alertify.success('Se creo correctamente')
+      $('#wallets').append('<div class="card bg-light">'+data['coin']['name']+': '+data['cant']+'</div>')
+
 
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
