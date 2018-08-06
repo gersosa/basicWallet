@@ -188,3 +188,24 @@ function create() {
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
   });
 }
+
+function send() {
+  var wallet_origin = $("#wallet_origin option:selected").val()
+  var wallet_to = $("#wallet_to option:selected").val()
+  var amount = $("#amount").val()
+  $.ajax({
+    url: operations,
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      wallet_from: wallet_origin,
+      wallet_to: wallet_to,
+      amount:amount
+    },
+    success: function(data, status) {
+
+
+    },
+    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+  });
+}
