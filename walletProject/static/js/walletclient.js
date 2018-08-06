@@ -6,6 +6,38 @@ var coins = localhost+'/api/coins/'
 var operations = localhost+'/api/operations/'
 var token = ''
 var userid = ''
+var name = ''
+alertify.set('notifier','position', 'top-right');
+
+
+function get_other_users() {
+  var coin = $( "#wallet_origin option:selected" ).val()
+  $.ajax({
+    url: wallets+'havent_user/',
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      user: name
+    },
+    success: function(data, status) {
+      $('#wallet_to').children('option:not(:first)').remove();
+      data.forEach(function(e) {
+        if (coin == e['coin']['name']) {
+          $('#wallet_to').append($('<option>', {
+            value: e['id'],
+            text: e['coin']['name']+'->'+e['cant']+'-'+e['user']['username']
+          }));
+        }
+      });
+    },
+    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+  });
+}
+
+$(document).on("change","#wallet_origin",function() {
+  get_other_users()
+});
+
 
 function get_coins_selects() {
   $.ajax({
@@ -35,9 +67,14 @@ function get_wallet(id) {
     },
     success: function(data, status) {
       $('#card_name').show()
-      $('#name').append(data[0]['user']['username'])
+      name = data[0]['user']['username']
+      $('#name').append(name)
       data.forEach(function(e) {
         $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
+        $('#wallet_origin').append($('<option>', {
+            value: e['coin']['name'],
+            text: e['coin']['name']+'->'+e['cant']
+          }));
         $('#balance_select').append($('<option>', {
             value: e['id'],
             text: e['coin']['name']
@@ -131,21 +168,21 @@ function create() {
     type: 'POST',
     dataType: 'json',
     data: {
-      user:user,
+      'user': {"username":user},
       cant: amount,
-      coin: coin_id
+      coin:  { coin:{ "id": coin_id, "name": coin_name}}
     },
     success: function(data, status) {
       console.log(data)
-      $('#card_name').show()
-      $('#name').append(data[0]['user']['username'])
-      data.forEach(function(e) {
-        $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
-        $('#balance_select').append($('<option>', {
-            value: e['id'],
-            text: e['coin']['name']
-          }));
-      });
+      // $('#card_name').show()
+      // $('#name').append(data[0]['user']['username'])
+      // data.forEach(function(e) {
+      //   $('#wallets').append('<div class="card bg-light">'+e['coin']['name']+': '+e['cant']+'</div>')
+      //   $('#balance_select').append($('<option>', {
+      //       value: e['id'],
+      //       text: e['coin']['name']
+      //     }));
+      // });
 
     },
     beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 

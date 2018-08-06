@@ -25,17 +25,6 @@ class CoinViewSet(viewsets.ModelViewSet):
     serializer_class = CoinSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @list_route()
-    def havent_user(self, request):
-        user_coins = Wallet.objects.filter(user=request.user).values_list('coin', flat=True)
-        coins = Coin.objects.exclude(pk__in=user_coins)
-
-        if coins:
-            serializer = self.get_serializer(coins, many=True)
-            return Response(serializer.data)
-
-        return Response([])
-
 
 class OperationViewSet(viewsets.ModelViewSet):
     queryset = Operation.objects.all()
@@ -68,6 +57,17 @@ class WalletViewSet(viewsets.ModelViewSet):
         return Response(
             {'detail': 'The user has not wallet a of this coin'},
             status=400)
+
+
+    @list_route()
+    def havent_user(self, request):
+        user_coins = Wallet.objects.exclude(user=request.user)
+
+        if user_coins:
+            serializer = self.get_serializer(user_coins, many=True)
+            return Response(serializer.data)
+
+        return Response([])
 
 
 class ClientView(generic.View):

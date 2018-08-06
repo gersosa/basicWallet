@@ -18,13 +18,16 @@ class CoinSerializer(serializers.HyperlinkedModelSerializer):
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(required=False)
     user = UserSerializer(required=False)
-    coin = CoinSerializer()
+    coin = CoinSerializer(required=False)
 
     def create(self, validated_data):
-        user = self.context['request'].user
+        print validated_data, 'acaaaa'
+        print validated_data['cant'], validated_data['user']['username'], validated_dat.user, 'estoooooooooooooooooooooooooooooooooo'
+        user = User.objects.get(username=validated_data['user']['username'])
+        amount = validated_data['cant']
         coin = Coin.objects.get(name=validated_data['coin']['name'])
 
-        return Wallet.objects.create(coin=coin, user=user)
+        return Wallet.objects.create(coin=coin, user=user, cant=amount)
 
     class Meta:
         model = Wallet

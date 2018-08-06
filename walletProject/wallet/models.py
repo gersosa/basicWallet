@@ -22,7 +22,7 @@ class Wallet(models.Model):
 
 
     def __str__(self):
-        return str(self.cant) + ' -> ' + self.user.username
+        return str(self.cant) + '->' + self.user.username
 
     def same_coin(self, wallet):
         return wallet.coin == self.coin
@@ -46,7 +46,7 @@ class Operation(models.Model):
     to_wallet = models.ForeignKey(Wallet, verbose_name=_('Billetera destino'))
 
     def __str__(self):
-        return self.from_wallet + ' -> ' + self.to_wallet
+        return self.from_wallet.user.username + '->' + self.to_wallet.user.username
 
     def save(self, *args, **kwargs):
         same_coin = self.from_wallet.same_coin(self.to_wallet)
@@ -64,6 +64,6 @@ class Operation(models.Model):
             }
         else:
             self.from_wallet.remove(self.mount)
-            self.to_wallet.sum(self.mount)
+            self.to_wallet.add(self.mount)
 
             return super(Operation, self).save(*args, **kwargs)
