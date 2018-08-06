@@ -58,9 +58,9 @@
 			<div class="card" style="display: none;" id="coin_create">
 				<label>Monedas: </label>
 					<select id="coins_select" class="form-control">
-						<option>--Seleccione una moneda--</option>
+						<option disabled selected value>--Seleccione una moneda--</option>
 					</select>
-					<input type="text" class="form-control" id="new_coin" placeholder="Ingrese un monto">
+					<input type="number" class="form-control" id="new_coin" placeholder="Ingrese un monto">
 				<div class="card-footer">
 					<button type="button" class="btn btn-warning" onclick="create()">Crear</button>
 				</div>
@@ -74,9 +74,9 @@
 					</select>
 				<label>Destino: </label>
 					<select id="wallet_to" class="form-control">
-						<option>--Seleccione un usuario--</option>
+						<option disabled selected value>--Seleccione un usuario--</option>
 					</select>
-					<input type="integer" class="form-control" name="" placeholder="Ingrese un monto" id="amount">
+					<input type="number" class="form-control" name="" placeholder="Ingrese un monto" id="amount">
 				<div class="card-footer">
 					<button type="button" class="btn btn-warning" onclick="send()">Enviar</button>
 				</div>

@@ -48,7 +48,7 @@ function get_coins_selects() {
     success: function(data, status) {
       data.forEach(function(element) {
           $('#coins_select').append($('<option>', {
-            value: element['id'],
+            value: element['name'],
             text: element['name']
           }));
       });
@@ -159,28 +159,33 @@ $(document).on("click","#balance",function(){
 
 function create() {
   var user = $('#name').text()
-  var coin_name = $( "#coins_select option:selected" ).text()
-  var coin_id = $("#coins_select option:selected").val()
+  var coin_name = $( "#coins_select option:selected" ).val()
   var amount = $('#new_coin').val()
-  console.log(user, coin_name, amount)
-  $.ajax({
-    url: wallets,
-    type: 'POST',
-    dataType: 'json',
-    data: {
-      user: user,
-      cant: amount,
-      coin: coin_name
-    },
-    success: function(data, status) {
-      console.log(data)
-      alertify.success('Se creo correctamente')
-      $('#wallets').append('<div class="card bg-light">'+data['coin']['name']+': '+data['cant']+'</div>')
+  if (coin_name) {
+    if (amount) {
+      $.ajax({
+        url: wallets,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          user: user,
+          cant: amount,
+          coin: coin_name
+        },
+        success: function(data, status) {
+          alertify.success('Se creo correctamente')
+          $('#wallets').append('<div class="card bg-light">'+data['coin']['name']+': '+data['cant']+'</div>')
 
 
-    },
-    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
-  });
+        },
+        beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+      });
+    }else{
+      alertify.error('Debe ingresar un monto')
+    }
+  }else{
+    alertify.error('Debe seleccionar una moneda')
+  }
 }
 
 function send() {
