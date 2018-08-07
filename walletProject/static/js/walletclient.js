@@ -192,37 +192,53 @@ function send() {
   var wallet_origin = $("#wallet_origin option:selected").val()
   var wallet_to = $("#wallet_to option:selected").val()
   var amount = $("#amount").val()
-  $.ajax({
-    url: operations,
-    type: 'POST',
-    dataType: 'json',
-    data: {
-      wallet_from: wallet_origin,
-      wallet_to: wallet_to,
-      amount:amount
-    },
-    success: function(data, status) {
-      alertify.success('El envió se realizo correctamente')
-    },
-    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
-  });
+  if (wallet_origin) {
+    if (wallet_to) {
+      if (amount) {
+        $.ajax({
+          url: operations,
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            wallet_from: wallet_origin,
+            wallet_to: wallet_to,
+            amount:amount
+          },
+          success: function(data, status) {
+            alertify.success('El envió se realizo correctamente')
+          },
+          beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+        });
+      }else{
+        alertify.error('Debe ingresar un monto')
+      }
+    }else{
+      alertify.error('Debe seleccionar el destino')
+    }
+  }else{
+    alertify.error('Debe seleccionar el origen')
+  }
 }
 
 function balance(){
   var coin = $("#balance_select option:selected").text()
-  $.ajax({
-    url: wallets+'calculator/',
-    type: 'GET',
-    dataType: 'json',
-    data: {
-      user: name,
-      coin: coin
-    },
-    success: function(data, status) {
-      alertify.alert('Usted cuenta con:', data['balance']+' '+coin);
-      $('#wallets').empty()
-      get_wallet(userid)
-    },
-    beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
-  });  
+  if (coin!='--Seleccione un moneda--') {
+    $.ajax({
+      url: wallets+'calculator/',
+      type: 'GET',
+      dataType: 'json',
+      data: {
+        user: name,
+        coin: coin
+      },
+      success: function(data, status) {
+        alertify.alert('Usted cuenta con:', data['balance']+' '+coin);
+        $('#wallets').empty()
+        get_wallet(userid)
+      },
+      beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','JWT ' + token); } 
+    });
+  }else{
+    alertify.error('Debe seleccionar una moneda')
+  }  
 }
