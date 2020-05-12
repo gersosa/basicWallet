@@ -2,7 +2,7 @@
 
 
 
-### Ripio Project ###
+### Project ###
 
 
 * virtualenv .
