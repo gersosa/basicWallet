@@ -6,4 +6,4 @@ django-filter==1.1.0
 django-cors-headers==2.1.0
 pytz==2018.5
 six==1.11.0
-PyJWT==1.5.3
+PyJWT==2.4.0
